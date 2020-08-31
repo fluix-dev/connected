@@ -1,0 +1,7 @@
+@layout('layouts/main')
+@set('title', error.message)
+@section('content')
+<div class="alert alert-danger" role="alert">
+  {{ error.message }}
+</div>
+@endsection

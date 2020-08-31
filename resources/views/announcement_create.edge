@@ -1,0 +1,59 @@
+@layout('layouts/main')
+
+@section('head')
+<link rel="stylesheet" href="static/css/codemirror.min.css">
+<link href="/static/css/toastui-editor.min.css" rel="stylesheet">
+@endsection
+
+@section('content')
+<form action="{{ route('AnnouncementController.create') }}" method="post" id="announcement-form">
+  {{ csrfField() }}
+  <textarea hidden id="description" name="description">{{ flashMessages.get('description') || '' }}</textarea>
+  <div class="row">
+    <div class="col-md">
+      <label class="d-block">
+        Title: <input class="form-control" placeholder="Title" name="title" value="{{ flashMessages.get('title') || '' }}" required>
+      </label>
+    </div>
+    <div class="col-md">
+      <label class="d-block">
+        Date: <input class="form-control" placeholder="Date" type="date" name="date" value="{{ flashMessages.get('date') || '' }}" required>
+      </label>
+    </div>
+    <div class="col-md">
+      <label class="d-block">
+        Club:
+        <select class="form-control" name="club" required>
+          @each(club in clubs)
+          <option value="{{ club.id }}">{{ club.name }}</option>
+          @endeach
+        </select>
+      </label>
+    </div>
+  </div>
+
+  <label class="d-block">
+    Description:
+  </label>
+  <div id="markdownEditor"></div>
+
+  <div class="mt-2">
+    <button type="submit" class="btn btn-lg btn-primary float-right">Submit</button>
+  </div>
+</form>
+@endsection
+
+@section('js')
+<script src="/static/js/toastui-editor-all.min.js"></script>
+<script>
+var editor = new toastui.Editor({
+  el: document.getElementById('markdownEditor'),
+  height: '500px',
+  initialValue: $('#description').val()
+});
+
+$("#announcement-form").submit(function() {
+  $("#description").val(editor.getMarkdown());
+});
+</script>
+@endsection

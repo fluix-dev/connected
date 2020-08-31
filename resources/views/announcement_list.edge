@@ -1,0 +1,14 @@
+@layout('layouts/main.edge')
+
+@section('content')
+@if(title)
+<h1>{{ title }}</h1>
+<hr>
+@endif
+@if(announcements.length === 0)
+<h2>Hmm, nothing seems to be here.</h2>
+@endif
+@each(announcement in announcements)
+@include('partials/announcement')
+@endeach
+@endsection

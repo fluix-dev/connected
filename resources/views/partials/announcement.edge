@@ -1,0 +1,42 @@
+@set('link', route('AnnouncementController.view', { params: { id: announcement.id } }))
+<div class="card mb-3">
+  <div class="card-header">
+    <h3>
+      @if(!announcement.approverId)
+      <span class="badge badge-warning">Private</span>
+      @endif
+      <a href="{{ link }}" class="link-unstyled">{{ announcement.title }}</a>
+    </h3>
+    @if(announcement.club)
+    <span class="badge badge-primary" >{{ announcement.club.name }}</span>
+    @endif
+  </div>
+  <div class="card-body">
+    <p class="card-text">
+      @if(full)
+      {{{  announcement.description }}}
+      @else
+      {{{ announcement.excerpt }}}
+      @endif
+    </p>
+  </div>
+  <div class="card-footer text-muted">
+    <span class="mouse-tooltip" title="{{ absoluteDate(announcement.date) }}">
+      <time datetime="{{ announcement.date }}" >
+        {{ prettyDate(announcement.date) }}
+      </time>
+    </span>
+    <div class="float-right">
+      @if(!announcement.approverId && request.user.isStaff)
+      <form class="d-inline" action="{{ route('AnnouncementController.approve', { params: { id: announcement.id } }) }}" method="post">
+      {{ csrfField() }}
+      <button type="submit" class="btn btn-success ">Approve</button>
+      </form>
+      @endif
+      @if(!full)
+      <a href="{{ link }}" class="btn btn-primary">Read More</a>
+      @endif
+    </div>
+
+  </div>
+</div>
