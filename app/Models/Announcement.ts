@@ -51,20 +51,33 @@ export default class Announcement extends BaseModel {
   @column.dateTime({ autoCreate: true, autoUpdate: true })
   public updatedAt: DateTime
 
-  public static queryViewableBy (user: UserData) {
+  public static filterViewableBy (query, user: UserData) {
     if (user.isStaff) {
-      return Announcement.query()
+      return query
     }
-    return Announcement
-      .query()
-      .andWhere(q => {
-        return q
-          .whereNotNull('approver_id')
-          .orWhere('author_id', user.id)
-      })
+    return query.andWhere(q => {
+      return q
+        .whereNotNull('approver_id')
+        .orWhere('author_id', user.id)
+    })
+  }
+
+  public static filterList (query) {
+    return query
+      .select(['id', 'authorId', 'approverId', 'clubId', 'title', 'excerpt', 'date'])
+      .preload('club')
   }
 
   public isViewableBy (user: UserData) {
+    // staff members can view all
+    // authors can view the ones they have made
+    // approved announcements can be viewed by all
     return this.approverId || this.authorId === user.id || user.isStaff
+  }
+
+  public isEditableBy (user: UserData) {
+    // only staff members or author can edit
+    // non-staff authors cannot edit after being approved
+    return user.isStaff || (this.authorId === user.id && !this.approverId)
   }
 }

@@ -1,0 +1,83 @@
+@layout('layouts/main')
+
+@section('head')
+<link rel="stylesheet" href="/static/css/codemirror.min.css" type="text/css">
+<link rel="stylesheet" href="/static/css/toastui-editor.min.css" type="text/css">
+@endsection
+
+@section('content')
+@set('title', announcement ? announcement.title : flashMessages.get('title'))
+@set('description', announcement ? announcement.raw : flashMessages.get('description'))
+@set('date', announcement ? announcement.date : flashMessages.get('date'))
+@set('club', announcement ? announcement.club : flashMessages.get('club'))
+
+@if(editing)
+<h1>Editing {{ announcement.title }}</h1>
+@else
+<h1>Create an Announcement</h1>
+@endif
+<hr>
+
+<form action="{{ submitUrl }}" method="post" id="announcement-form">
+  {{ csrfField() }}
+  <textarea hidden id="description" name="description">{{ description || '' }}</textarea>
+  <div class="row">
+    <div class="col-md">
+      <label class="d-block">
+        Title:
+        <input class="form-control" placeholder="Title" name="title" value="{{ title || '' }}" required>
+      </label>
+    </div>
+    <div class="col-md">
+      <label class="d-block">
+        Date:
+        <input
+          class="form-control"
+          pattern="\d{4}-\d{2}-\d{2}"
+          title="yyyy-mm-dd"
+          placeholder="yyyy-mm-dd" type="date"
+          name="date"
+          value="{{ date ? absoluteDate(date) : '' }}" required>
+      </label>
+    </div>
+    <div class="col-md">
+      <label class="d-block">
+        Club:
+        <select class="form-control" name="club" required>
+          @each(foundClub in clubs)
+          @if(foundClub.id === club)
+          <option value="{{ foundClub.id }}" selected>{{ foundClub.name }}</option>
+          @else
+          <option value="{{ foundClub.id }}">{{ foundClub.name }}</option>
+          @endif
+          @endeach
+        </select>
+      </label>
+    </div>
+  </div>
+
+  <label class="d-block">
+    Description:
+  </label>
+  <div id="markdownEditor"></div>
+
+  <div class="mt-2">
+    <button type="submit" class="btn btn-lg btn-primary float-right">Submit</button>
+  </div>
+</form>
+@endsection
+
+@section('js')
+<script src="/static/js/toastui-editor-all.min.js"></script>
+<script>
+  var editor = new toastui.Editor({
+    el: document.getElementById('markdownEditor'),
+    height: '50vh',
+    initialValue: $('#description').val()
+  });
+
+  $("#announcement-form").submit(function() {
+    $("#description").val(editor.getMarkdown());
+  });
+</script>
+@endsection

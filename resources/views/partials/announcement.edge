@@ -22,7 +22,7 @@
   </div>
   <div class="card-footer text-muted">
     <span class="mouse-tooltip" title="{{ absoluteDate(announcement.date) }}">
-      <time datetime="{{ announcement.date }}" >
+      <time datetime="{{ absoluteDate(announcement.date) }}" >
         {{ prettyDate(announcement.date) }}
       </time>
     </span>
@@ -30,9 +30,14 @@
       @if(!announcement.approverId && request.user.isStaff)
       <form class="d-inline" action="{{ route('AnnouncementController.approve', { params: { id: announcement.id } }) }}" method="post">
       {{ csrfField() }}
-      <button type="submit" class="btn btn-success ">Approve</button>
+      <button type="submit" class="btn btn-success">Approve</button>
       </form>
       @endif
+
+      @if(request.user.isStaff || (!announcement.approverId && request.user.id === announcement.authorId))
+      <a href="{{ route('AnnouncementController.edit', { params: { id: announcement.id } }) }}" class="btn btn-info">Edit</a>
+      @endif
+
       @if(!full)
       <a href="{{ link }}" class="btn btn-primary">Read More</a>
       @endif

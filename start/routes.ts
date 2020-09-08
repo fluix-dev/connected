@@ -20,20 +20,22 @@
 
 import Route from '@ioc:Adonis/Core/Route'
 
-Route.on('/').render('login')
+Route.get('/', 'AuthController.home')
 
 Route.get('/login', 'AuthController.login')
+Route.post('/logout', 'AuthController.logout')
 Route.get('/auth', 'AuthController.auth')
 
 Route.get('/announcements', 'AnnouncementController.list').middleware('auth:user')
 Route.get('/announcements/mine', 'AnnouncementController.mine').middleware('auth:user')
 Route.get('/today', 'AnnouncementController.today').middleware('auth:user')
+
 Route.get('/announcement/:id', 'AnnouncementController.view').middleware('auth:user')
+
+Route.get('/edit/:id', 'AnnouncementController.editForm').middleware('auth:user')
+Route.post('/edit/:id', 'AnnouncementController.edit').middleware('auth:user')
 
 Route.get('/create', 'AnnouncementController.createForm').middleware('auth:user')
 Route.post('/create', 'AnnouncementController.create').middleware('auth:user')
 
 Route.post('/approve/:id', 'AnnouncementController.approve').middleware('auth:staff')
-
-// TODO: Logout
-// TODO: Editing
