@@ -4,6 +4,7 @@ import OAuthService from 'App/Services/OAuthService'
 import { Exception } from '@poppinss/utils'
 import { staffDomain, studentDomain } from '../../../config/oauth'
 import { parseOneAddress } from 'email-addresses'
+import * as url from 'url'
 
 export default class AuthController {
   public async home ({ session, view, response }) {
@@ -15,8 +16,8 @@ export default class AuthController {
     return view.render('login')
   }
 
-  public async login ({ response }) {
-    return response.redirect(await OAuthService.getRedirect())
+  public async login ({ response, request }) {
+    return response.redirect(await OAuthService.getRedirect(request.get().next))
   }
 
   public async logout ({ response, session }) {
@@ -26,7 +27,8 @@ export default class AuthController {
   }
 
   public async auth ({ request, response, session }) {
-    const code = request.get().code
+    const qs = request.get()
+    const code = qs.code
     if (typeof code !== 'string') {
       throw new Exception('OAuth token not found', 400)
     }
@@ -61,6 +63,10 @@ export default class AuthController {
       isStaff: true,
     })
 
-    return response.redirect(Route.makeUrl('AnnouncementController.today'))
+    if (qs.state) {
+      return response.redirect(url.parse(qs.state).path)
+    } else {
+      return response.redirect(Route.makeUrl('AnnouncementController.today'))
+    }
   }
 }

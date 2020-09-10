@@ -57,7 +57,7 @@
 @else
 <nav class="navbar navbar-expand-lg navbar-light bg-light">
   <div class="container justify-content-center">
-    <a class="navbar-brand" href="{{ route('AuthController.home') }}">
+    <a href="{{ route('AuthController.home') }}">
       <img src="/static/images/mac-radio-logo.png" class="mac-radio-logo" alt="MAC Radio Logo">
     </a>
   </div>
@@ -120,9 +120,11 @@
 <script src="/static/js/jquery.slim.min.js"></script>
 <script src="/static/js/popper.min.js"></script>
 <script src="/static/js/bootstrap.min.js"></script>
+<script src="/static/js/clipboard.min.js"></script>
 <script>
   $(function() {
     $('.mouse-tooltip').tooltip()
+    new ClipboardJS('.copy-clipboard')
   })
 </script>
 @section('js')

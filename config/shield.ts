@@ -26,7 +26,7 @@ export const csp: ShieldConfig['csp'] = {
   | The CSP rules are disabled by default for seamless onboarding.
   |
   */
-  enabled: false,
+  enabled: true,
 
   /*
   |--------------------------------------------------------------------------
@@ -45,6 +45,11 @@ export const csp: ShieldConfig['csp'] = {
   |
   */
   directives: {
+    defaultSrc: ['\'self\''],
+    styleSrc: ['\'self\'', 'https://fonts.googleapis.com'],
+    fontSrc: ['\'self\'', 'https://fonts.gstatic.com'],
+    imgSrc: ['*', 'data:'],
+    scriptSrc: ['\'self\'', '\'unsafe-inline\''],
   },
 
   /*

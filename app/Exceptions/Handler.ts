@@ -30,7 +30,7 @@ export default class ExceptionHandler extends HttpExceptionHandler {
 
   public async report (error, ctx) {
     if (error.status >= 500 && error.status <= 599) {
-      console.log(error)
+      ctx.logger.error(error)
     }
     super.report(error, ctx)
   }

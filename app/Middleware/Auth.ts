@@ -8,7 +8,11 @@ export default class Auth {
     let user = ctx.session.get('user', null)
 
     if (!user) {
-      return ctx.response.redirect(Route.makeUrl('AuthController.login') as string)
+      return ctx.response.redirect(Route.makeUrl('AuthController.login', {
+        qs: {
+          next: ctx.request.url(true),
+        },
+      }) as string)
     } else if (requirement === 'staff' && !user.isStaff) {
       throw new Exception('Unauthorized', 401)
     }

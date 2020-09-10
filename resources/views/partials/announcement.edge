@@ -27,6 +27,8 @@
       </time>
     </span>
     <div class="float-right">
+      <button type="button" class="btn btn-secondary copy-clipboard" data-clipboard-text="{{ link }}">Copy Link</button>
+
       @if(!announcement.approverId && request.user.isStaff)
       <form class="d-inline" action="{{ route('AnnouncementController.approve', { params: { id: announcement.id } }) }}" method="post">
       {{ csrfField() }}
