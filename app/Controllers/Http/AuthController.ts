@@ -60,7 +60,7 @@ export default class AuthController {
     session.put('user', {
       id: user.id,
       email: user.email,
-      isStaff: true,
+      isStaff: user.isStaff,
     })
 
     if (qs.state) {
