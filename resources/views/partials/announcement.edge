@@ -38,6 +38,13 @@
       <a href="{{ route('AnnouncementController.edit', { params: { id: announcement.id } }) }}" class="btn btn-info">Edit</a>
       @endif
 
+      @if(request.user.isStaff)
+      <form class="d-inline" action="{{ route('AnnouncementController.delete', { params: { id: announcement.id } }) }}" method="post">
+        {{ csrfField() }}
+        <button type="submit" class="btn btn-danger">Delete</button>
+      </form>
+      @endif
+
       @if(!full)
       <a href="{{ link }}" class="btn btn-primary">Read More</a>
       @endif

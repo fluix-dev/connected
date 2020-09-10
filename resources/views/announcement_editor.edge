@@ -44,6 +44,10 @@
       <label class="d-block">
         Club:
         <select class="form-control" name="club" required>
+          @if(!club)
+          <option selected></option>
+          @endif
+
           @each(foundClub in clubs)
           @if(foundClub.id === club)
           <option value="{{ foundClub.id }}" selected>{{ foundClub.name }}</option>

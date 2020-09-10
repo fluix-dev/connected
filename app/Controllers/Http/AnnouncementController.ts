@@ -143,4 +143,19 @@ export default class AnnouncementController {
       },
     }))
   }
+
+  public async delete ({ params, request, response, session }) {
+    const announcement = await AnnouncementService.getAnnouncement(params.id, request.user)
+    if (!announcement) {
+      throw new Exception('Announcement not found!', 404)
+    }
+
+    await announcement.delete()
+
+    session.flash({
+      success: 'Announcement deleted!',
+    })
+
+    response.redirect(Route.makeUrl('AnnouncementController.list'))
+  }
 }

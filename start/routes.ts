@@ -39,3 +39,13 @@ Route.get('/create', 'AnnouncementController.createForm').middleware('auth:user'
 Route.post('/create', 'AnnouncementController.create').middleware('auth:user')
 
 Route.post('/approve/:id', 'AnnouncementController.approve').middleware('auth:staff')
+
+Route.post('/delete/:id', 'AnnouncementController.delete').middleware('auth:staff')
+
+
+Route.get('/clubs', 'ClubController.list').middleware('auth:staff')
+Route.post('/club/add', 'ClubController.add').middleware('auth:staff')
+
+Route.get('/guide', 'GuideController.index')
+Route.get('/guide/student', 'GuideController.student')
+Route.get('/guide/teacher', 'GuideController.teacher')

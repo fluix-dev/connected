@@ -1,0 +1,25 @@
+@layout('layouts/main')
+
+@section('content')
+<h1>List of clubs</h1>
+<div class="card" style="width: 20rem;">
+  <ul class="list-group list-group-flush">
+    @each(club in clubs)
+    <li class="list-group-item">{{ club.name }}</li>
+    @endeach
+    <li class="list-group-item">
+      <form method="POST" action="{{ route('ClubController.add') }}">
+        <div class="form-row">
+          {{ csrfField() }}
+          <div class="col-auto">
+            <input type="text" class="form-control" id="name" name="name" placeholder="Club Name">
+          </div>
+          <div class="col-auto">
+            <button type="submit" class="btn btn-primary">Add</button>
+          </div>
+        </div>
+      </form>
+    </li>
+  </ul>
+</div>
+@endsection

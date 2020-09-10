@@ -1,0 +1,25 @@
+@layout('layouts/main')
+
+@section('content')
+<div class="row">
+  <div class="col-sm-6">
+    <div class="card">
+      <div class="card-body">
+        <h5 class="card-title">Student Guide</h5>
+        <p class="card-text">Guide for students who wish to write announcements.</p>
+        <a href="{{ route('GuideController.student') }}" class="btn btn-primary">See Guide</a>
+      </div>
+    </div>
+  </div>
+  <div class="col-sm-6">
+    <div class="card">
+      <div class="card-body">
+        <h5 class="card-title">Teacher Guide</h5>
+        <p class="card-text">Guide for teachers to approve and make changes to announcements.</p>
+        <a href="{{ route('GuideController.teacher') }}" class="btn btn-primary">See Guide</a>
+      </div>
+    </div>
+  </div>
+</div>
+
+@endsection

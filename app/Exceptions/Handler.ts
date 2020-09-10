@@ -21,7 +21,7 @@ export default class ExceptionHandler extends HttpExceptionHandler {
 
   protected statusPages = {
     '400..499': 'error',
-    '500..599': 'server-error',
+    '500..599': 'server_error',
   }
 
   constructor () {

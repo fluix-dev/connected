@@ -1,5 +1,9 @@
 import Route from '@ioc:Adonis/Core/Route'
 import User from 'App/Models/User'
+import OAuthService from 'App/Services/OAuthService'
+import { Exception } from '@poppinss/utils'
+import { staffDomain, studentDomain } from '../../../config/oauth'
+import { parseOneAddress } from 'email-addresses'
 
 export default class AuthController {
   public async home ({ session, view, response }) {
@@ -12,7 +16,7 @@ export default class AuthController {
   }
 
   public async login ({ response }) {
-    return response.redirect(Route.makeUrl('AuthController.auth'))
+    return response.redirect(await OAuthService.getRedirect())
   }
 
   public async logout ({ response, session }) {
@@ -21,13 +25,42 @@ export default class AuthController {
     return response.redirect(Route.makeUrl('AuthController.home'))
   }
 
-  public async auth ({ response, session }) {
-    let data = await User.findBy('id', 2) as User
+  public async auth ({ request, response, session }) {
+    const code = request.get().code
+    if (typeof code !== 'string') {
+      throw new Exception('OAuth token not found', 400)
+    }
+    let googleUser
+    try {
+      googleUser = await OAuthService.getUser(code)
+    } catch(e) {
+      throw new Exception('Invalid OAuth token', 400)
+    }
+    let user = await User.findBy('email', googleUser.email)
+    // @ts-ignore
+    // this just seems to be either the library being bad or ts messing up because .domain definitely exists...
+    let domain = parseOneAddress(googleUser.email).domain
+    if (!domain) {
+      throw new Error('Invalid domain for user ' + googleUser.email)
+    }
+
+    if (domain !== studentDomain && domain !== studentDomain) {
+      throw new Exception('User email unauthorized!', 401)
+    }
+
+    if (!user) {
+      user = await User.create({
+        email: googleUser.email,
+        isStaff: domain === staffDomain,
+      })
+    }
+
     session.put('user', {
-      id: data.id,
-      email: data.email,
-      isStaff: data.isStaff,
+      id: user.id,
+      email: user.email,
+      isStaff: true,
     })
-    return response.redirect(Route.makeUrl('AnnouncementController.list'))
+
+    return response.redirect(Route.makeUrl('AnnouncementController.today'))
   }
 }

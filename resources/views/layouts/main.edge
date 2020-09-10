@@ -16,6 +16,7 @@
   @endsection
 </head>
 <body>
+@if(request.user)
 <nav class="navbar navbar-expand-lg navbar-light bg-light">
   <div class="container justify-content-center">
     <div class="column">
@@ -53,6 +54,15 @@
     </div>
   </div>
 </nav>
+@else
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+  <div class="container justify-content-center">
+    <a class="navbar-brand" href="{{ route('AuthController.home') }}">
+      <img src="/static/images/mac-radio-logo.png" class="mac-radio-logo" alt="MAC Radio Logo">
+    </a>
+  </div>
+</nav>
+@endif
 <br>
 <main class="container clearfix">
   @if(flashMessages.has('error'))
@@ -75,7 +85,37 @@
   @section('content')
   @endsection
 </main>
-@include('partials/footer')
+<footer class="footer d-flex align-items-center text-muted">
+  <div class="container">
+
+    <div class="row justify-content-center mt-1">
+      <a href="https://mcpt.ca"><img src="/static/images/mcpt-logo.png" id="mcpt-logo" alt="MCPT Logo"></a>
+    </div>
+
+    <div class="row justify-content-center mt-1 font-weight-bold text-center">
+      @if(request.user)
+      <div class="col-sm-2">
+        <form action="{{ route('AuthController.logout') }}" method="post">
+          {{ csrfField() }}
+          <a class="link-unstyled" href="#" onclick="this.parentNode.submit()">Logout</a>
+        </form>
+      </div>
+      @endif
+      <div class="col-sm-2">
+        <a class="link-unstyled" href="{{ route('GuideController.index') }}">Guide</a>
+      </div>
+      @if(request.user && request.user.isStaff)
+      <div class="col-sm-2">
+        <a class="link-unstyled" href="{{ route('ClubController.list') }}">Club Management</a>
+      </div>
+      @endif
+    </div>
+
+    <div class="row justify-content-center mt-1">
+      <span>Created by Larry & Steven</span>
+    </div>
+  </div>
+</footer>
 </body>
 <script src="/static/js/jquery.slim.min.js"></script>
 <script src="/static/js/popper.min.js"></script>
