@@ -46,7 +46,7 @@ export default class AuthController {
       throw new Error('Invalid domain for user ' + googleUser.email)
     }
 
-    if (domain !== studentDomain && domain !== studentDomain) {
+    if (domain !== studentDomain && domain !== staffDomain) {
       throw new Exception('User email unauthorized!', 401)
     }
 
