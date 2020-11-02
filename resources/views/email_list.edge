@@ -1,0 +1,25 @@
+@layout('layouts/main')
+
+@section('content')
+<h1>List of allowed emails</h1>
+<div class="card medium-card">
+  <ul class="list-group list-group-flush">
+    @each(email in emails)
+    <li class="list-group-item">{{ email.email }}</li>
+    @endeach
+    <li class="list-group-item">
+      <form method="POST" action="{{ route('EmailController.add') }}">
+        <div class="form-row">
+          {{ csrfField() }}
+          <div class="col-auto">
+            <input type="text" class="form-control" id="email" name="email" placeholder="Email">
+          </div>
+          <div class="col-auto">
+            <button type="submit" class="btn btn-primary">Add</button>
+          </div>
+        </div>
+      </form>
+    </li>
+  </ul>
+</div>
+@endsection
