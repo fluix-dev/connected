@@ -5,13 +5,25 @@
 <div class="card medium-card">
   <ul class="list-group list-group-flush">
     @each(email in emails)
-    <li class="list-group-item">{{ email.email }}</li>
+    <li class="list-group-item">
+      <form method="POST" action="{{ route('EmailController.delete', { params: { id: email.id } }) }}">
+        {{ csrfField() }}
+        <div class="form-row">
+          <div class="col">
+            {{ email.email }}
+          </div>
+          <div class="col-auto">
+            <button type="submit" class="btn btn-danger">X</button>
+          </div>
+        </div>
+      </form>
+    </li>
     @endeach
     <li class="list-group-item">
       <form method="POST" action="{{ route('EmailController.add') }}">
         <div class="form-row">
           {{ csrfField() }}
-          <div class="col-auto">
+          <div class="col">
             <input type="text" class="form-control" id="email" name="email" placeholder="Email">
           </div>
           <div class="col-auto">
