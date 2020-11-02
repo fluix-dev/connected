@@ -5,6 +5,7 @@ import Renderer from 'App/Services/Renderer'
 import { Exception } from '@poppinss/utils/build'
 import AnnouncementValidator from 'App/Services/AnnouncementValidator'
 import Club from 'App/Models/Club'
+import Email from 'App/Models/Email'
 import AnnouncementService from 'App/Services/AnnouncementService'
 
 export default class AnnouncementController {
@@ -56,6 +57,9 @@ export default class AnnouncementController {
     const data = await request.validate(AnnouncementValidator)
     if (!await Club.findBy('id', data.club)) {
       throw new Exception('Club not found!', 404)
+    }
+    if (!await Email.findBy('email', session.email)) {
+      throw new Exception('Email not allowed!', 404)
     }
 
     const announcement = new Announcement()
