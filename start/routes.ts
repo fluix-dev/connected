@@ -46,6 +46,11 @@ Route.post('/delete/:id', 'AnnouncementController.delete').middleware('auth:staf
 Route.get('/clubs', 'ClubController.list').middleware('auth:staff')
 Route.post('/club/add', 'ClubController.add').middleware('auth:staff')
 
+Route.get('/emails', 'EmailController.list').middleware('auth:staff')
+Route.post('/email/add', 'EmailController.add').middleware('auth:staff')
+Route.post('/email/delete/:id', 'EmailController.delete').middleware('auth:staff')
+
+
 Route.get('/guide', 'GuideController.index')
 Route.get('/guide/student', 'GuideController.student')
 Route.get('/guide/teacher', 'GuideController.teacher')
